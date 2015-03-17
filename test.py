@@ -112,7 +112,7 @@ class List(Node):
 
 
 def n2l(inp):
-	"""create gui widgets from nars.logic.entity terms"""
+	"""create gui widgets from nars.logic objects"""
 
 	cls = inp.__class__
 
@@ -320,6 +320,7 @@ flatten_optionals(grammar)
 
 
 
+# replace all classes in grammar with sym's
 for v in grammar.values():
 	for alt in v:
 		for i,v in enumerate(alt):
@@ -330,6 +331,11 @@ for v in grammar.values():
 					name += str(clashes_count + 1)
 				alt[i] = sym(**{name:v})
 			
+
+
+
+#todo: do something about oneormore's
+
 
 
 
