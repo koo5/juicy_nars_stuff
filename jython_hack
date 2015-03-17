@@ -1,0 +1,2 @@
+for i in (find | grep -i .jar$); echo $i; unzip -o $i -d . ;end
+
