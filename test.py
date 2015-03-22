@@ -47,8 +47,8 @@ class optional(object):
 		s.seq = list(seq)
 #		print 'optional:'+str(s.seq)
 
-class oneormore(object):
-	def __init__(s, *vargs):
+class some(object):
+	def __init__(s, *vargs, min=1):
 		s.seq = vargs
 
 
@@ -83,7 +83,7 @@ class Syntaxed(Node):
 			print "verbalizing "+repr(i)
 			if type(i) == unicode:
 				yield i
-			elif type(i) == oneormore: pass#tbd
+			elif type(i) == some: pass#tbd
 			elif i.name in s.kids:
 				for j in s.kids[i.name].verbalize():
 					yield j
@@ -227,7 +227,7 @@ Sentence:[	[Statement, ".", optional(Tense), optional(Truth)],
 		[Statement, "!", optional(Truth)]],
 Statement:[	[sym(copuled='copuled')],[Term],[Operation]],
 Term:[		[Word],[Variable],[CompoundTerm],[Statement]],
-Operation:[	["(^", Word, oneormore([",",Term]), ")"]],
+Operation:[	["(^", Word, some([",",Term]), ")"]],
 'copuled':[	["<", sym(subject=Term), Copula, sym(predicate=Term), ">"]],
 Copula:[	["-->"],nal1.Inheritance,
 		["<->"],nal2.Similarity,
@@ -242,21 +242,21 @@ Copula:[	["-->"],nal1.Inheritance,
 		["</>"],0,
 		["<|>"],0
 		],
-CompoundTerm:[	#todo:ensure unique sym names in postprocessing, make oneormore equal with List or try something more complex?
-		["{",   Term, oneormore(",", Term),"}"], nal3.SetExt,
-		["[",   Term, oneormore(",", Term), "]"],nal3.SetInt,
-		["(&,", Term, oneormore(",", Term), ")"],nal3.IntersectionExt,
-		["(|,", Term, oneormore(",", Term), ")"],nal3.IntersectionInt,
+CompoundTerm:[	#todo:ensure unique sym names in postprocessing, make some equal with List or try something more complex?
+		["{",   Term, some(",", Term),"}"], nal3.SetExt,
+		["[",   Term, some(",", Term), "]"],nal3.SetInt,
+		["(&,", Term, some(",", Term), ")"],nal3.IntersectionExt,
+		["(|,", Term, some(",", Term), ")"],nal3.IntersectionInt,
 		["(-,", Term, ",", Term, ")"],		nal3.DifferenceExt,
 		["(~,", Term, ",", Term, ")"],		nal3.DifferenceInt,
-		["(*,", Term, oneormore(",", Term), ")"],nal4.Product,
-		["(/,", Term, oneormore(",", Term), ")"],nal4.ImageExt,
-		["(\,", Term, oneormore(",", Term), ")"],nal4.ImageInt,
+		["(*,", Term, some(",", Term), ")"],nal4.Product,
+		["(/,", Term, some(",", Term), ")"],nal4.ImageExt,
+		["(\,", Term, some(",", Term), ")"],nal4.ImageInt,
 		["(--,",Term, ")"],			nal1.Negation,
-		["(||,",Term, oneormore(",", Term), ")"],nal5.Disjunction,
-		["(&&,",Term, oneormore(",", Term), ")"],nal5.Conjunction,
-		["(&/,",Term, oneormore(",", Term), ")"],nal5.Conjunction,
-		["(&|,",Term, oneormore(",", Term), ")"],nal5.Conjunction],
+		["(||,",Term, some(",", Term), ")"],nal5.Disjunction,
+		["(&&,",Term, some(",", Term), ")"],nal5.Conjunction,
+		["(&/,",Term, some(",", Term), ")"],nal5.Conjunction,
+		["(&|,",Term, some(",", Term), ")"],nal5.Conjunction],
 Implication:[	["=|>"],["=/>"]],
 Variable:[	["$", Word],
 		["#",optional(Word)],
@@ -324,7 +324,7 @@ flatten_optionals(grammar)
 for v in grammar.values():
 	for alt in v:
 		for i,v in enumerate(alt):
-			if type(v) not in [unicode, oneormore, sym]:
+			if type(v) not in [unicode, some, sym]:
 				name = v.__name__.lower()
 				clashes_count = len([existing for existing in alt if type(existing) == sym and existing.name == name ])
 				if clashes_count:
@@ -334,7 +334,7 @@ for v in grammar.values():
 
 
 
-#todo: do something about oneormore's
+#todo: do something about some's
 
 
 
