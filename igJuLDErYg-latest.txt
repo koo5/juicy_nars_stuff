@@ -150,8 +150,7 @@ def cos(<<number>expression>):
 
 :cos 
   
-i can define a foreach loop "syntax":
-["for". <identifier>. "in" <<iterable>expression>. ":\n", <statements>]
+["for" <item - identifier> "in" <iterable - <<iterable>expression>> ":\n" <body - statements>]
 
 i actually define syntaxes and child types separately, but thats the idea.
 
