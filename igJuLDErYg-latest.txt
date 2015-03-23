@@ -9,6 +9,7 @@ parses text and becomes Term
 
 narsStructuredProtoTerm:
 contains the Syntaxed etc stuff
++command line client
 
 bettyProtoTerm:
 better name bettyWidget?
