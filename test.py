@@ -6,7 +6,17 @@ import glob, json
 
 from java.lang import StringBuilder
 
-import nars
+
+import java.lang
+from java.lang import ClassLoader
+
+class Test(ClassLoader):
+	def f(self):        
+		print self.getPackages()
+Test().f()
+
+
+
 import nars.core, nars.build
 n=nars.core.NAR(nars.build.Default())
 from nars.io.narsese import Narsese
@@ -48,8 +58,12 @@ class optional(object):
 #		print 'optional:'+str(s.seq)
 
 class some(object):
-	def __init__(s, *vargs, min=1):
+	def __init__(s, *vargs, **kwargs):
 		s.seq = vargs
+		if 'min' in kwargs:
+                  s.min = kwargs['min']
+                else:
+                  s.min = 1
 
 
 #future nengo widgets
@@ -369,3 +383,50 @@ def print_grammar():
 if __name__ == "__main__":
 	main()
 	
+
+
+"""
+
+
+//lets not do this now
+    /*
+    private static class Sym {
+        public static enum Param {LIST_ELEM_TYPE, SRSTR};
+        public static class Params extends HashMap<Param, Object>{};
+        public static Params newParams(){
+            return new Params();
+        }
+
+        Map<Param, Object> params; // like the type of items of a List or min/max items
+        Type type;
+        public Sym(Class type, String name, Map<Param, Object> params){
+            this.type = type;
+        }
+    };
+
+    private Object some(Object sym){
+        Sym.Params params = Sym.newParams();
+        params.put(Sym.Param.LIST_ELEM_TYPE, sym);
+        return new Sym(ListMatch.class, "", params);
+
+    }
+    */
+
+
+        /*
+    //private class Sequence extends ImmutableList<Object> {}; // can contain String, Sym,
+    private class Choices extends ArrayList<ImmutableList<Object>> {};
+    private class Grammar extends HashMap<Object, Choices> {};
+    private Grammar g;
+    public Lang(){
+        g = new Grammar();
+        g.put(Task.class, new Choices());
+        g.get(Task.class).add(l().add(
+                BudgetValue.class).add(
+                Sentence.class).build());
+    }
+    private ImmutableList.Builder<Object> l(){
+        return new ImmutableList.Builder<Object>();
+    }
+        */
+"""
